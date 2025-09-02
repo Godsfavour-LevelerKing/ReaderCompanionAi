@@ -1,6 +1,6 @@
 # Readers Companion AI
 
-A intelligent web application that helps students study more efficiently by automatically generating flashcards from text, tracking study progress, and organizing materials by topic.
+An intelligent web application that helps students study more efficiently by automatically generating flashcards from text, tracking study progress, and organizing materials by topic.
 
 ## ✨ Features
 
@@ -20,14 +20,21 @@ A intelligent web application that helps students study more efficiently by auto
 
 ## 🚀 Getting Started
 
-### Prerequisites
+You can access the application in two ways:
 
+### Option 1: Live Preview (Recommended)
+A live version of the application is deployed and ready to use:
+**👉 [Test the Live App](https://godsfavour-levelerking.github.io/ReaderCompanionAi/)**
+
+### Option 2: Local Development
+To run this project locally on your machine, follow these steps:
+
+#### Prerequisites
 Ensure you have the following installed on your system:
 *   Python 3.8 or higher
 *   `pip` (Python package manager)
 
-### Installation & Local Development
-
+#### Installation & Setup
 1.  **Clone the repository:**
     ```bash
     git clone https://github.com/[your-username]/readers-companion-ai.git
@@ -80,3 +87,4 @@ Ensure you have the following installed on your system:
 ## 📄 License
 
 This project is licensed under the **MIT License**. See the `LICENSE` file for details.
+```
