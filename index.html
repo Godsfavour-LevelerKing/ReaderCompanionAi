@@ -1,29 +1,1087 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ReaderCompanionAI</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReaderCompanionAI - AI Flashcard Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --primary-light: #4895ef;
+            --accent: #4cc9f0;
+            --success: #4bb543;
+            --warning: #ffdd00;
+            --danger: #dc3545;
+            --dark: #212529;
+            --dark-gray: #495057;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .tagline {
+            color: var(--dark-gray);
+            font-size: 1.1rem;
+        }
+
+        .main-nav {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .main-nav ul {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+        }
+
+        .main-nav li {
+            margin: 0;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 15px 25px;
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .badge {
+            background: var(--primary-light);
+            color: var(--white);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .topic-selector {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+
+        select, input[type="text"], textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        select:focus, input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .input-area {
+            margin-bottom: 20px;
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .generate-section {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-large {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+        }
+
+        .api-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            background: var(--light-gray);
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-connected {
+            background: var(--success);
+        }
+
+        .status-disconnected {
+            background: var(--danger);
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filters select {
+            width: auto;
+            min-width: 150px;
+        }
+
+        .flashcards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .flashcard {
+            height: 200px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .flashcard-back {
+            background: var(--white);
+            color: var(--dark);
+            transform: rotateY(180deg);
+            text-align: center;
+            font-size: 1.1rem;
+            border: 1px solid var(--light-gray);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--light-gray);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            background: var(--success);
+            color: var(--white);
+            box-shadow: var(--shadow-lg);
+            transform: translateX(100%);
+            transition: var(--transition);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .modal-header h3 {
+            color: var(--primary);
+        }
+
+        .close-modal {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .close-modal:hover {
+            color: var(--dark);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        footer {
+            background: var(--white);
+            padding: 20px 0;
+            margin-top: 40px;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Study mode styles */
+        .study-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--light);
+            border-radius: var(--border-radius);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-nav ul {
+                flex-direction: column;
+            }
+            
+            .nav-link {
+                text-align: center;
+                border-bottom: 1px solid var(--light-gray);
+                border-left: 3px solid transparent;
+            }
+            
+            .nav-link:hover, .nav-link.active {
+                border-bottom: 1px solid var(--light-gray);
+                border-left: 3px solid var(--primary);
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .flashcards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .filters select {
+                width: 100%;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-links {
+                justify-content: center;
+            }
+
+            .study-nav {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <h1>📚 ReaderCompanionAI</h1>
-    <div class="status">
-      <span id="backend-status" class="status-checking">Checking backend...</span>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-brain"></i> ReaderCompanionAI</h1>
+                <p class="tagline">Transform your study notes into interactive flashcards</p>
+            </div>
+        </header>
+        
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#" class="nav-link active" data-section="input-section">Create</a></li>
+                <li><a href="#" class="nav-link" data-section="flashcards-section">Study</a></li>
+                <li><a href="#" class="nav-link" data-section="saved-section">Saved</a></li>
+            </ul>
+        </nav>
+        
+        <div class="main-content">
+            <section id="input-section" class="content-section active">
+                <div class="card">
+                    <h2>Create New Flashcards</h2>
+                    
+                    <div class="topic-selector">
+                        <label for="topic-select">Select a topic:</label>
+                        <select id="topic-select">
+                            <option value="biology">Biology</option>
+                            <option value="history">History</option>
+                            <option value="programming">Programming</option>
+                            <option value="physics">Physics</option>
+                            <option value="math">Mathematics</option>
+                            <option value="custom">Custom Topic</option>
+                        </select>
+                        
+                        <div id="custom-topic-input" class="hidden">
+                            <input type="text" id="custom-topic" placeholder="Enter your topic">
+                        </div>
+                    </div>
+                    
+                    <div class="input-area">
+                        <label for="study-notes">Your study notes:</label>
+                        <textarea id="study-notes" placeholder="Paste your study notes here..."></textarea>
+                        
+                        <div class="input-actions">
+                            <button id="sample-btn" class="btn btn-outline">
+                                <i class="fas fa-lightbulb"></i> Load Sample
+                            </button>
+                            <button id="clear-btn" class="btn btn-outline">
+                                <i class="fas fa-trash"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="generate-section">
+                        <button id="generate-btn" class="btn btn-primary btn-large">
+                            <i class="fas fa-robot"></i> Generate Flashcards
+                        </button>
+                        
+                        <div class="api-status">
+                            <span class="status-indicator" id="api-status-indicator"></span>
+                            <span id="api-status-text">Checking backend connection...</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="flashcards-section" class="content-section">
+                <div class="card">
+                    <div class="section-header">
+                        <h2>Your Flashcards <span id="flashcard-count" class="badge">0</span></h2>
+                        <div class="section-actions">
+                            <button id="shuffle-btn" class="btn btn-outline" disabled>
+                                <i class="fas fa-random"></i> Shuffle
+                            </button>
+                            <button id="study-mode-btn" class="btn btn-outline" disabled>
+                                <i class="fas fa-graduation-cap"></i> Study Mode
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="flashcards-container" class="flashcards-container">
+                        <div class="empty-state">
+                            <i class="fas fa-book-open"></i>
+                            <p>No flashcards yet. Enter notes and click "Generate Flashcards" to get started!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="saved-section" class="content-section">
+                <div class="card">
+                    <div class="section-header">
+                        <h2>Saved Flashcards</h2>
+                        <button id="load-saved-btn" class="btn btn-primary">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                    </div>
+                    
+                    <div class="filters">
+                        <select id="topic-filter">
+                            <option value="">All Topics</option>
+                            <option value="biology">Biology</option>
+                            <option value="history">History</option>
+                            <option value="programming">Programming</option>
+                            <option value="physics">Physics</option>
+                            <option value="math">Mathematics</option>
+                        </select>
+                        
+                        <select id="sort-filter">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="topic">By Topic</option>
+                        </select>
+                    </div>
+                    
+                    <div id="saved-flashcards-container" class="flashcards-container">
+                        <div class="empty-state">
+                            <i class="fas fa-database"></i>
+                            <p>No saved flashcards found. Generate some flashcards first!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <div class="footer-content">
+                <p>ReaderCompanionAI - AI Flashcard Generator &copy; 2025</p>
+                <div class="footer-links">
+                    <a href="#" id="about-link">About</a>
+                    <a href="#" id="privacy-link">Privacy</a>
+                    <a href="#" id="contact-link">Contact</a>
+                </div>
+            </div>
+        </footer>
     </div>
-  </nav>
+    
+    <!-- Modals -->
+    <div id="about-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>About ReaderCompanionAI</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>ReaderCompanionAI is an AI-powered flashcard generator that helps you study more effectively by transforming your notes into interactive flashcards.</p>
+                <p>This application was developed by a team of dedicated developers and educators to make studying more engaging and efficient.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="notification-text">Flashcards generated successfully!</span>
+        </div>
+    </div>
 
-  <!-- Flashcard Generator -->
-  <section class="generator">
-    <textarea id="input-text" placeholder="Paste your study notes or content here..."></textarea>
-    <button id="generate-btn">Generate Flashcards</button>
-  </section>
+    <script>
+        // Backend API URL - update this to your PythonAnywhere URL
+        const API_BASE_URL = 'https://roetechhub.pythonanywhere.com';
+        
+        // Sample content for different topics
+        const topicContents = {
+            biology: `Photosynthesis is the process used by plants, algae, and certain bacteria to harness energy from sunlight into chemical energy. 
+Oxygen is released as a byproduct of photosynthesis. The mitochondria are known as the powerhouses of the cell because they generate most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy.
+DNA replication is the biological process of producing two identical replicas of DNA from one original DNA molecule. This process occurs in all living organisms and is the basis for biological inheritance.`,
+            
+            history: `The American Revolution was a colonial revolt that occurred between 1765 and 1783. The American Patriots in the Thirteen Colonies defeated the British in the American Revolutionary War with the assistance of France, winning independence from Great Britain and establishing the United States of America.
+The French Revolution was a period of radical political and societal change in France that began with the Estates General of 1789 and ended with the formation of the French Consulate in November 1799.`,
+            
+            programming: `JavaScript is a programming language that conforms to the ECMAScript specification. JavaScript is high-level, often just-in-time compiled, and multi-paradigm. It has curly-bracket syntax, dynamic typing, prototype-based object-orientation, and first-class functions.
+HTML (HyperText Markup Language) is the standard markup language for documents designed to be displayed in a web browser. It can be assisted by technologies such as Cascading Style Sheets and scripting languages such as JavaScript.`,
+            
+            physics: `Newton's laws of motion are three laws that describe the relationship between the motion of an object and the forces acting on it. These laws can be paraphrased as follows:
+1. An object will not change its motion unless a force acts on it.
+2. The force on an object is equal to its mass times its acceleration.
+3. When two objects interact, they apply forces to each other of equal magnitude and opposite direction.`,
+            
+            math: `Algebra is a branch of mathematics dealing with symbols and the rules for manipulating those symbols. In elementary algebra, those symbols represent quantities without fixed values, known as variables.
+Calculus is the mathematical study of continuous change, in the same way that geometry is the study of shape and algebra is the study of generalizations of arithmetic operations.`
+        };
 
-  <!-- Flashcards Display -->
-  <section id="flashcards-container" class="flashcards"></section>
-
-  <script src="main.js"></script>
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            checkBackendConnection();
+        });
+        
+        function initializeApp() {
+            // Navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetSection = this.dataset.section;
+                    
+                    // Update active nav link
+                    navLinks.forEach(navLink => navLink.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show target section
+                    contentSections.forEach(section => section.classList.remove('active'));
+                    document.getElementById(targetSection).classList.add('active');
+                });
+            });
+            
+            // Topic selection
+            const topicSelect = document.getElementById('topic-select');
+            const customTopicInput = document.getElementById('custom-topic-input');
+            
+            topicSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customTopicInput.classList.remove('hidden');
+                } else {
+                    customTopicInput.classList.add('hidden');
+                    document.getElementById('study-notes').value = topicContents[this.value] || '';
+                }
+            });
+            
+            // Load sample notes
+            document.getElementById('sample-btn').addEventListener('click', function() {
+                const topic = topicSelect.value;
+                if (topic !== 'custom') {
+                    document.getElementById('study-notes').value = topicContents[topic] || '';
+                    showNotification('Sample notes loaded!');
+                }
+            });
+            
+            // Clear notes
+            document.getElementById('clear-btn').addEventListener('click', function() {
+                document.getElementById('study-notes').value = '';
+                showNotification('Notes cleared!');
+            });
+            
+            // Generate flashcards
+            document.getElementById('generate-btn').addEventListener('click', function() {
+                const notes = document.getElementById('study-notes').value.trim();
+                let topic = topicSelect.value;
+                
+                if (topic === 'custom') {
+                    topic = document.getElementById('custom-topic').value.trim() || 'general';
+                }
+                
+                if (!notes) {
+                    showNotification('Please enter some study notes first!', 'error');
+                    return;
+                }
+                
+                generateFlashcards(notes, topic);
+            });
+            
+            // Load saved flashcards
+            document.getElementById('load-saved-btn').addEventListener('click', function() {
+                loadSavedFlashcards();
+            });
+            
+            // Shuffle flashcards
+            document.getElementById('shuffle-btn').addEventListener('click', function() {
+                shuffleFlashcards();
+            });
+            
+            // Study mode
+            document.getElementById('study-mode-btn').addEventListener('click', function() {
+                activateStudyMode();
+            });
+            
+            // Setup modals
+            setupModals();
+            
+            // Load initial content for default topic
+            document.getElementById('study-notes').value = topicContents.biology;
+        }
+        
+        function checkBackendConnection() {
+            const apiStatusIndicator = document.getElementById('api-status-indicator');
+            const apiStatusText = document.getElementById('api-status-text');
+            
+            fetch(`${API_BASE_URL}/api/health`)
+                .then(response => {
+                    if (response.ok) return response.json();
+                    throw new Error('Network response was not ok');
+                })
+                .then(data => {
+                    apiStatusIndicator.className = 'status-indicator status-connected';
+                    apiStatusText.textContent = 'Backend connected';
+                })
+                .catch(error => {
+                    console.error('Backend connection failed:', error);
+                    apiStatusIndicator.className = 'status-indicator status-disconnected';
+                    apiStatusText.textContent = 'Backend not connected - using demo mode';
+                });
+        }
+        
+        function generateFlashcards(notes, topic) {
+            const generateBtn = document.getElementById('generate-btn');
+            
+            // Show loading state
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            generateBtn.disabled = true;
+            
+            fetch(`${API_BASE_URL}/api/generate-flashcards`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    text: notes,
+                    topic: topic,
+                    num_questions: 5
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayFlashcards(data.flashcards);
+                showNotification(`${data.flashcards.length} flashcards generated successfully!`);
+            })
+            .catch(error => {
+                console.error('Error calling backend API:', error);
+                // Fallback to simulated generation if API call fails
+                simulateAIGeneration(notes, topic);
+                showNotification('Using demo mode - backend not available', 'error');
+            })
+            .finally(() => {
+                // Reset button
+                generateBtn.innerHTML = '<i class="fas fa-robot"></i> Generate Flashcards';
+                generateBtn.disabled = false;
+            });
+        }
+        
+        function loadSavedFlashcards() {
+            fetch(`${API_BASE_URL}/api/flashcards`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.flashcards && data.flashcards.length > 0) {
+                        displayFlashcards(data.flashcards, 'saved-flashcards-container');
+                        showNotification(`Loaded ${data.flashcards.length} saved flashcards!`);
+                    } else {
+                        showNotification('No saved flashcards found', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading saved flashcards:', error);
+                    showNotification('Failed to load saved flashcards', 'error');
+                });
+        }
+        
+        function simulateAIGeneration(notes, topic) {
+            // This is a fallback function that generates sample flashcards
+            // when the backend is not available
+            let generatedCards = [];
+            
+            // Simple implementation that creates questions from sentences
+            const sentences = notes.split(/[.!?]/).filter(s => s.trim().length > 10);
+            
+            for (let i = 0; i < Math.min(5, sentences.length); i++) {
+                const sentence = sentences[i].trim();
+                let question = '';
+                
+                if (sentence.includes(' is ')) {
+                    question = sentence.replace(' is ', ' is what? ');
+                } else if (sentence.includes(' are ')) {
+                    question = sentence.replace(' are ', ' are what? ');
+                } else if (sentence.includes(' was ')) {
+                    question = sentence.replace(' was ', ' was what? ');
+                } else if (sentence.includes(' were ')) {
+                    question = sentence.replace(' were ', ' were what? ');
+                } else {
+                    // Generic question if we can't find a pattern
+                    const words = sentence.split(' ');
+                    if (words.length > 3) {
+                        question = `What is ${words[0]}?`;
+                    } else {
+                        question = `Explain: ${sentence}`;
+                    }
+                }
+                
+                generatedCards.push({
+                    question: question,
+                    answer: sentence
+                });
+            }
+            
+            // If we couldn't generate enough cards, add some generic ones
+            if (generatedCards.length < 3) {
+                generatedCards = [
+                    { question: "What is the main topic of these notes?", answer: "The notes discuss: " + notes.substring(0, 100) + "..." },
+                    { question: "What are the key points?", answer: "Key points include: " + notes.substring(0, 150) + "..." }
+                ];
+            }
+            
+            // Display the generated flashcards
+            displayFlashcards(generatedCards);
+        }
+        
+        function displayFlashcards(cards, containerId = 'flashcards-container') {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (cards.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>No flashcards found.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            cards.forEach((card, index) => {
+                const flashcardEl = document.createElement('div');
+                flashcardEl.className = 'flashcard';
+                flashcardEl.innerHTML = `
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="card-number">${index + 1}</div>
+                            <p>${card.question}</p>
+                        </div>
+                        <div class="flashcard-back">
+                            <p>${card.answer}</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Add flip on click
+                flashcardEl.addEventListener('click', function() {
+                    this.classList.toggle('flipped');
+                });
+                
+                container.appendChild(flashcardEl);
+            });
+            
+            // Update flashcard count if it's the main container
+            if (containerId === 'flashcards-container') {
+                document.getElementById('flashcard-count').textContent = cards.length;
+                
+                // Enable action buttons
+                document.getElementById('shuffle-btn').disabled = false;
+                document.getElementById('study-mode-btn').disabled = false;
+            }
+        }
+        
+        function shuffleFlashcards() {
+            // Get the current flashcards and shuffle them
+            const flashcards = Array.from(document.querySelectorAll('#flashcards-container .flashcard'));
+            const shuffled = flashcards.sort(() => 0.5 - Math.random());
+            
+            // Clear and reappend shuffled flashcards
+            const container = document.getElementById('flashcards-container');
+            container.innerHTML = '';
+            shuffled.forEach(card => container.appendChild(card));
+            
+            showNotification('Flashcards shuffled!');
+        }
+        
+        function activateStudyMode() {
+            // Implement study mode functionality
+            const flashcards = document.querySelectorAll('#flashcards-container .flashcard');
+            
+            if (flashcards.length === 0) {
+                showNotification('No flashcards to study!', 'error');
+                return;
+            }
+            
+            // Hide all flashcards
+            flashcards.forEach(card => card.style.display = 'none');
+            
+            // Show first flashcard
+            flashcards[0].style.display = 'block';
+            
+            // Create navigation for study mode
+            const studyNav = document.createElement('div');
+            studyNav.className = 'study-nav';
+            studyNav.innerHTML = `
+                <button id="prev-card" class="btn btn-outline"><i class="fas fa-arrow-left"></i></button>
+                <span>1 / ${flashcards.length}</span>
+                <button id="next-card" class="btn btn-outline"><i class="fas fa-arrow-right"></i></button>
+                <button id="exit-study" class="btn btn-primary">Exit Study Mode</button>
+            `;
+            
+            document.getElementById('flashcards-container').parentNode.appendChild(studyNav);
+            
+            let currentIndex = 0;
+            
+            // Set up navigation events
+            document.getElementById('next-card').addEventListener('click', function() {
+                if (currentIndex < flashcards.length - 1) {
+                    flashcards[currentIndex].style.display = 'none';
+                    currentIndex++;
+                    flashcards[currentIndex].style.display = 'block';
+                    studyNav.querySelector('span').textContent = `${currentIndex + 1} / ${flashcards.length}`;
+                }
+            });
+            
+            document.getElementById('prev-card').addEventListener('click', function() {
+                if (currentIndex > 0) {
+                    flashcards[currentIndex].style.display = 'none';
+                    currentIndex--;
+                    flashcards[currentIndex].style.display = 'block';
+                    studyNav.querySelector('span').textContent = `${currentIndex + 1} / ${flashcards.length}`;
+                }
+            });
+            
+            document.getElementById('exit-study').addEventListener('click', function() {
+                // Show all flashcards
+                flashcards.forEach(card => card.style.display = 'block');
+                
+                // Remove study navigation
+                studyNav.remove();
+                
+                showNotification('Exited study mode');
+            });
+            
+            showNotification('Study mode activated! Use the navigation to move between cards.');
+        }
+        
+        function setupModals() {
+            // Modal functionality implementation
+            const aboutLink = document.getElementById('about-link');
+            const aboutModal = document.getElementById('about-modal');
+            const closeModal = document.querySelector('.close-modal');
+            
+            aboutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                aboutModal.classList.add('show');
+            });
+            
+            closeModal.addEventListener('click', function() {
+                aboutModal.classList.remove('show');
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === aboutModal) {
+                    aboutModal.classList.remove('show');
+                }
+            });
+        }
+        
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            
+            notificationText.textContent = message;
+            
+            if (type === 'error') {
+                notification.classList.add('error');
+            } else {
+                notification.classList.remove('error');
+            }
+            
+            notification.classList.add('show');
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
