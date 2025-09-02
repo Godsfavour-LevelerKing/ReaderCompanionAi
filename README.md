@@ -1,91 +1,82 @@
-# 📚 Study Buddy - AI Flashcard Generator
+# Readers Companion AI
 
-A collaborative web application that transforms study notes into interactive flashcards using AI.
-
----
+A intelligent web application that helps students study more efficiently by automatically generating flashcards from text, tracking study progress, and organizing materials by topic.
 
 ## ✨ Features
 
-- **Multi-topic support:** Biology, History, Programming, and more
-- **Interactive flip cards:** Engaging animations for active learning
-- **MySQL database integration:** Robust and scalable storage
-- **Responsive design:** Works seamlessly across all devices
-- **Team collaboration:** Built and maintained by a diverse team
-
----
+*   **AI-Powered Flashcard Generation:** Automatically creates question-and-answer flashcards from any submitted text.
+*   **Topic-Based Organization:** Easily sort and retrieve your flashcards by subject or topic.
+*   **Study Session Tracking:** Monitor your study habits with timestamps and session history.
+*   **Simple & Intuitive Interface:** A clean, user-friendly web interface built for focus and efficiency.
+*   **RESTful API:** A well-documented API for core functionality, enabling future integrations.
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** HTML5, CSS3, JavaScript
-- **Backend:** Python Flask
-- **Database:** MySQL
+*   **Backend:** Python, Flask, SQLite
+*   **Frontend:** HTML5, CSS3, Vanilla JavaScript
+*   **Deployment:** PythonAnywhere
+*   **Version Control:** Git & GitHub
+*   **API:** RESTful design
 
----
+## 🚀 Getting Started
 
-## 👥 Team Contributors
+### Prerequisites
 
-Our project is developed and maintained by the following team members:
+Ensure you have the following installed on your system:
+*   Python 3.8 or higher
+*   `pip` (Python package manager)
 
-- **Einstein Dipondo** – [einstenmarto30@gmail.com](mailto:einstenmarto30@gmail.com)
-- **Metrine Wairimu** – [wairimu.metrine5@gmail.com](mailto:wairimu.metrine5@gmail.com)
-- **Lebo Maria** – [marialebo06@gmail.com](mailto:marialebo06@gmail.com)
-- **Dammyart Academy** – [Dammyartacademy@gmail.com](mailto:Dammyartacademy@gmail.com)
-- **Stephen Ayuen Mach** – [ayuenmach09@gmail.com](mailto:ayuenmach09@gmail.com)
+### Installation & Local Development
 
-*Want to join us? Open an issue or pull request!*
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/[your-username]/readers-companion-ai.git
+    cd readers-companion-ai
+    ```
 
----
+2.  **(Optional) Create a virtual environment:**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+    ```
 
-## 🚀 Quick Start
+3.  **Install required dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-### 1. Clone and Setup
+4.  **Run the application:**
+    ```bash
+    python app.py
+    ```
 
-```bash
-git clone https://github.com/Einsteinke-hub/study-ai.git
-cd study-ai
-python -m venv venv
-# On Windows:
-venv\Scripts\activate
-# On macOS/Linux:
-source venv/bin/activate
-pip install -r requirements.txt
-```
+5.  **Open your browser and navigate to:**
+    `http://localhost:5000`
 
-### 2. Configure Database
+## 📡 API Reference
 
-Create a `.env` file in the project root:
+| Endpoint | Method | Description |
+| :--- | :--- | :--- |
+| `/api/health` | `GET` | Health check endpoint for API status. |
+| `/api/generate-flashcards` | `POST` | Submit text to generate new flashcards. |
+| `/api/flashcards` | `GET` | Retrieve a list of all flashcards. |
+| `/api/study-sessions` | `GET` | Retrieve a history of study sessions. |
+| `/api/flashcards/<id>` | `DELETE` | Delete a specific flashcard by its ID. |
 
-```env
-MYSQL_HOST=localhost
-MYSQL_USER=root
-MYSQL_PASSWORD=your_password
-MYSQL_DB=study_buddy
-```
+## 👥 Team
 
-### 3. Run the Application
+*   **Obinwa Ogechi Perpetual** (Ogechiobinwa@gmail.com) – Backend & Database Architecture
+*   **Anthonia Othetheaso** (t27613850@gmail.com) – Frontend Development & UI/UX Design
+*   **Godsfavour Abrahams Roe** (roetechhub@gmail.com) – Testing, Documentation & Deployment
 
-```bash
-python app.py
-```
+## 🔮 Future Roadmap
 
-Visit [http://localhost:5000](http://localhost:5000) to use the app.
-
----
-
-## 📞 Support & Feedback
-
-Questions, suggestions, or issues?  
-Contact any team member above or open a GitHub issue.
-
----
-
-## 🤝 Contributing
-
-We welcome contributions from everyone!  
-Please read our [CONTRIBUTING.md](CONTRIBUTING.md) before submitting pull requests.
-
----
+*   Integration of more advanced AI models for higher-quality question generation.
+*   User authentication and personalized flashcard sets.
+*   Detailed analytics and visualizations on study performance.
+*   Spaced repetition algorithm to optimize study schedules.
+*   Mobile application for studying on the go.
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the **MIT License**. See the `LICENSE` file for details.
