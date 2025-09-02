@@ -37,7 +37,7 @@ Ensure you have the following installed on your system:
 #### Installation & Setup
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/[your-username]/readers-companion-ai.git
+    git clone https://github.com/Godsfavour-LevelerKing/readers-companion-ai.git
     cd readers-companion-ai
     ```
 
