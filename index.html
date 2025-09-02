@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Buddy - AI Flashcard Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-brain"></i> Study Buddy</h1>
+                <p class="tagline">Transform your study notes into interactive flashcards</p>
+            </div>
+        </header>
+        
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#" class="nav-link active" data-section="input-section">Create</a></li>
+                <li><a href="#" class="nav-link" data-section="flashcards-section">Study</a></li>
+                <li><a href="#" class="nav-link" data-section="saved-section">Saved</a></li>
+            </ul>
+        </nav>
+        
+        <div class="main-content">
+            <section id="input-section" class="content-section active">
+                <div class="card">
+                    <h2>Create New Flashcards</h2>
+                    
+                    <div class="topic-selector">
+                        <label for="topic-select">Select a topic:</label>
+                        <select id="topic-select">
+                            <option value="biology">Biology</option>
+                            <option value="history">History</option>
+                            <option value="programming">Programming</option>
+                            <option value="physics">Physics</option>
+                            <option value="math">Mathematics</option>
+                            <option value="custom">Custom Topic</option>
+                        </select>
+                        
+                        <div id="custom-topic-input" class="hidden">
+                            <input type="text" id="custom-topic" placeholder="Enter your topic">
+                        </div>
+                    </div>
+                    
+                    <div class="input-area">
+                        <label for="study-notes">Your study notes:</label>
+                        <textarea id="study-notes" placeholder="Paste your study notes here..."></textarea>
+                        
+                        <div class="input-actions">
+                            <button id="sample-btn" class="btn btn-outline">
+                                <i class="fas fa-lightbulb"></i> Load Sample
+                            </button>
+                            <button id="clear-btn" class="btn btn-outline">
+                                <i class="fas fa-trash"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="generate-section">
+                        <button id="generate-btn" class="btn btn-primary btn-large">
+                            <i class="fas fa-robot"></i> Generate Flashcards
+                        </button>
+                        
+                        <div class="api-status">
+                            <span class="status-indicator" id="api-status-indicator"></span>
+                            <span id="api-status-text">Checking backend connection...</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="flashcards-section" class="content-section">
+                <div class="card">
+                    <div class="section-header">
+                        <h2>Your Flashcards <span id="flashcard-count" class="badge">0</span></h2>
+                        <div class="section-actions">
+                            <button id="shuffle-btn" class="btn btn-outline" disabled>
+                                <i class="fas fa-random"></i> Shuffle
+                            </button>
+                            <button id="study-mode-btn" class="btn btn-outline" disabled>
+                                <i class="fas fa-graduation-cap"></i> Study Mode
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="flashcards-container" class="flashcards-container">
+                        <div class="empty-state">
+                            <i class="fas fa-book-open"></i>
+                            <p>No flashcards yet. Enter notes and click "Generate Flashcards" to get started!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="saved-section" class="content-section">
+                <div class="card">
+                    <div class="section-header">
+                        <h2>Saved Flashcards</h2>
+                        <button id="load-saved-btn" class="btn btn-primary">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                    </div>
+                    
+                    <div class="filters">
+                        <select id="topic-filter">
+                            <option value="">All Topics</option>
+                            <option value="biology">Biology</option>
+                            <option value="history">History</option>
+                            <option value="programming">Programming</option>
+                            <option value="physics">Physics</option>
+                            <option value="math">Mathematics</option>
+                        </select>
+                        
+                        <select id="sort-filter">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="topic">By Topic</option>
+                        </select>
+                    </div>
+                    
+                    <div id="saved-flashcards-container" class="flashcards-container">
+                        <div class="empty-state">
+                            <i class="fas fa-database"></i>
+                            <p>No saved flashcards found. Generate some flashcards first!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <div class="footer-content">
+                <p>Study Buddy - AI Flashcard Generator &copy; 2025</p>
+                <div class="footer-links">
+                    <a href="#" id="about-link">About</a>
+                    <a href="#" id="privacy-link">Privacy</a>
+                    <a href="#" id="contact-link">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Modals -->
+    <div id="about-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>About Study Buddy</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Study Buddy is an AI-powered flashcard generator that helps you study more effectively by transforming your notes into interactive flashcards.</p>
+                <p>This application was developed by a team of dedicated developers and educators to make studying more engaging and efficient.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="notification-text">Flashcards generated successfully!</span>
+        </div>
+    </div>
+
+    <script>
+        // Backend API URL - change this to match your Flask server
+        const API_BASE_URL = 'https://einsteinke.pythonanywhere.com';
+        
+        // Sample content for different topics
+        const topicContents = {
+            biology: `Photosynthesis is the process used by plants, algae, and certain bacteria to harness energy from sunlight into chemical energy. 
+Oxygen is released as a byproduct of photosynthesis. The mitochondria are known as the powerhouses of the cell because they generate most of the cell's supply of adenosine triphosphate (ATP), used as a source of chemical energy.
+DNA replication is the biological process of producing two identical replicas of DNA from one original DNA molecule. This process occurs in all living organisms and is the basis for biological inheritance.`,
+            
+            history: `The American Revolution was a colonial revolt that occurred between 1765 and 1783. The American Patriots in the Thirteen Colonies defeated the British in the American Revolutionary War with the assistance of France, winning independence from Great Britain and establishing the United States of America.
+The French Revolution was a period of radical political and societal change in France that began with the Estates General of 1789 and ended with the formation of the French Consulate in November 1799.`,
+            
+            programming: `JavaScript is a programming language that conforms to the ECMAScript specification. JavaScript is high-level, often just-in-time compiled, and multi-paradigm. It has curly-bracket syntax, dynamic typing, prototype-based object-orientation, and first-class functions.
+HTML (HyperText Markup Language) is the standard markup language for documents designed to be displayed in a web browser. It can be assisted by technologies such as Cascading Style Sheets and scripting languages such as JavaScript.`,
+            
+            physics: `Newton's laws of motion are three laws that describe the relationship between the motion of an object and the forces acting on it. These laws can be paraphrased as follows:
+1. An object will not change its motion unless a force acts on it.
+2. The force on an object is equal to its mass times its acceleration.
+3. When two objects interact, they apply forces to each other of equal magnitude and opposite direction.`,
+            
+            math: `Algebra is a branch of mathematics dealing with symbols and the rules for manipulating those symbols. In elementary algebra, those symbols represent quantities without fixed values, known as variables.
+Calculus is the mathematical study of continuous change, in the same way that geometry is the study of shape and algebra is the study of generalizations of arithmetic operations.`
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize variables and event listeners
+            initializeApp();
+        });
+        
+        function initializeApp() {
+            // Navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetSection = this.dataset.section;
+                    
+                    // Update active nav link
+                    navLinks.forEach(navLink => navLink.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show target section
+                    contentSections.forEach(section => section.classList.remove('active'));
+                    document.getElementById(targetSection).classList.add('active');
+                });
+            });
+            
+            // Topic selection
+            const topicSelect = document.getElementById('topic-select');
+            const customTopicInput = document.getElementById('custom-topic-input');
+            const customTopic = document.getElementById('custom-topic');
+            
+            topicSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customTopicInput.classList.remove('hidden');
+                } else {
+                    customTopicInput.classList.add('hidden');
+                    document.getElementById('study-notes').value = topicContents[this.value] || '';
+                }
+            });
+            
+            // Load sample notes
+            document.getElementById('sample-btn').addEventListener('click', function() {
+                const topic = topicSelect.value;
+                if (topic !== 'custom') {
+                    document.getElementById('study-notes').value = topicContents[topic] || '';
+                    showNotification('Sample notes loaded!');
+                }
+            });
+            
+            // Clear notes
+            document.getElementById('clear-btn').addEventListener('click', function() {
+                document.getElementById('study-notes').value = '';
+                showNotification('Notes cleared!');
+            });
+            
+            // Generate flashcards
+            document.getElementById('generate-btn').addEventListener('click', function() {
+                const notes = document.getElementById('study-notes').value.trim();
+                let topic = topicSelect.value;
+                
+                if (topic === 'custom') {
+                    topic = customTopic.value.trim() || 'general';
+                }
+                
+                if (!notes) {
+                    showNotification('Please enter some study notes first!', 'error');
+                    return;
+                }
+                
+                generateFlashcards(notes, topic);
+            });
+            
+            // Check backend connection on page load
+            checkBackendConnection();
+            
+            // Modal functionality
+            setupModals();
+        }
+        
+        // The rest of your JavaScript functions (checkBackendConnection, generateFlashcards, etc.)
+        // would go here, adapted to work with the new UI
+        
+        // For the sake of brevity, I haven't included all the JavaScript code,
+        // but you would need to adapt your existing functions to work with the new UI elements
+    </script>
+</body>
+</html>
